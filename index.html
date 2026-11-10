@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sixty60 Flex</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Nunito+Sans:wght@400;600;700&display=swap">
+<style>
+/* Palette: deep navy + teal + bright yellow, in the spirit of Sixty60's colours. No logos or wordmarks are used.
+   Visual language: one shared route versus many single trips; prices as a ladder. */
+:root{
+  --bg:#F2F8F8; --surface:#FFFFFF; --ink:#0B2540; --muted:#4E6478; --line:#D5E6E8;
+  --navy:#0B2540; --teal:#00857F; --teal-2:#00A99D; --teal-soft:#DDF3F1;
+  --sun:#FFC629; --sun-ink:#0B2540; --sun-soft:#FFF4CF; --coral:#E8543B;
+  --on-dark:#FFFFFF; --on-dark-muted:#B9D3DA;
+  --display:"Poppins", "Segoe UI", system-ui, sans-serif;
+  --body:"Nunito Sans", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#071A2C; --surface:#0E2A44; --ink:#EAF4F6; --muted:#A6BFCB; --line:#1F4260;
+  --teal:#2CC5B8; --teal-2:#4FD8CB; --teal-soft:#0F3B45; --sun-soft:#3A3115; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#071A2C; --surface:#0E2A44; --ink:#EAF4F6; --muted:#A6BFCB; --line:#1F4260;
+  --teal:#2CC5B8; --teal-2:#4FD8CB; --teal-soft:#0F3B45; --sun-soft:#3A3115; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.6 var(--body);margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--navy)}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);line-height:1.12;text-wrap:balance;margin:0}
+h1{font-size:clamp(2rem,5.6vw,3.4rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(1.55rem,3.8vw,2.2rem);font-weight:700;letter-spacing:-.01em}
+h3{font-size:1.1rem;font-weight:700}
+p{margin:0;max-width:62ch}
+.lede{font-size:1.12rem;color:var(--muted)}
+.eyebrow{font:700 .78rem/1 var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--teal)}
+.num{font-family:var(--display);font-variant-numeric:tabular-nums}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px;border-radius:6px}
+
+/* header */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--navy);color:var(--on-dark)}
+.bar{display:flex;align-items:center;gap:16px;min-height:66px;flex-wrap:wrap;padding-block:8px}
+.mark{font:800 1.3rem/1 var(--display);text-decoration:none;display:flex;align-items:center;gap:10px;color:var(--on-dark)}
+.mark svg{width:30px;height:30px}
+nav{display:flex;gap:4px;flex-wrap:wrap;flex:1}
+nav a{text-decoration:none;padding:7px 12px;border-radius:999px;color:var(--on-dark-muted);font-weight:600;font-size:.95rem;white-space:nowrap}
+nav a[aria-current="page"]{color:var(--navy);background:var(--sun)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:700 1rem/1 var(--display);padding:14px 22px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;background:var(--sun);color:var(--sun-ink)}
+.btn:hover{filter:brightness(1.05)}
+.btn.small{padding:10px 16px;font-size:.9rem}
+.btn.teal{background:var(--teal);color:#fff}
+.btn.ghost{background:transparent;color:inherit;border:2px solid currentColor}
+@media (max-width:720px){nav{order:3;flex-basis:100%;flex-wrap:nowrap;overflow-x:auto}.bar>.btn{margin-left:auto}}
+
+section.band{padding-block:56px}
+.dark{background:var(--navy);color:var(--on-dark)}
+.dark .lede,.dark .muted{color:var(--on-dark-muted)}
+.dark .eyebrow{color:var(--sun)}
+.tint{background:var(--teal-soft)}
+.stack{display:flex;flex-direction:column;gap:16px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:36px;align-items:center}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:20px}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:16px}
+.grid2>*,.grid3>*,.grid4>*{min-width:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px}
+.dark .card{background:#12345A;border-color:#1E4A73;color:var(--on-dark)}
+
+/* hero */
+.hero{padding-block:48px 64px;position:relative;overflow:hidden}
+.hero h1 em{font-style:normal;color:var(--sun)}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font:700 .82rem/1 var(--display);padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.1);color:var(--on-dark)}
+/* phone mock */
+.phone{width:min(100%,330px);margin-inline:auto;background:#06182B;border-radius:36px;padding:12px;box-shadow:0 30px 60px -28px rgba(0,0,0,.6);border:2px solid #24486B}
+.screen{background:var(--surface);color:var(--ink);border-radius:26px;padding:18px 16px;display:flex;flex-direction:column;gap:12px}
+.screen .top{display:flex;justify-content:space-between;align-items:center;font:700 .85rem var(--display)}
+.basket{display:flex;justify-content:space-between;background:var(--bg);border-radius:12px;padding:10px 12px;font-weight:700}
+.opt{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:12px;border-radius:14px;border:2px solid var(--line)}
+.opt.on{border-color:var(--teal);background:var(--teal-soft)}
+.opt .ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--navy);color:#fff}
+.opt.on .ic{background:var(--teal)}
+.opt b{display:block;font:700 .98rem/1.2 var(--display)}
+.opt small{color:var(--muted);font-size:.8rem}
+.opt .pr{font:800 1.15rem var(--display)}
+.slots{display:flex;gap:6px;flex-wrap:wrap}
+.slots span{font:700 .78rem/1 var(--display);padding:7px 9px;border-radius:8px;border:1.5px solid var(--line);color:var(--muted)}
+.slots span.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.pay{background:var(--sun);color:var(--sun-ink);text-align:center;border-radius:999px;padding:12px;font:800 .95rem var(--display)}
+
+/* stats */
+.stat{display:flex;flex-direction:column;gap:6px}
+.stat .big{font:800 clamp(2rem,5vw,2.8rem)/1 var(--display);color:var(--teal)}
+.dark .stat .big{color:var(--sun)}
+.icon{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:var(--teal-soft);color:var(--teal)}
+.icon svg{width:28px;height:28px}
+
+/* route diagram */
+.route{width:100%;height:auto;display:block}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-weight:600;font-size:.92rem}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:4px;margin-right:6px;vertical-align:-2px}
+
+/* steps */
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));counter-reset:s}
+.steps li{counter-increment:s;position:relative;padding:24px 20px 20px;border-radius:18px;background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.steps li::before{content:counter(s);position:absolute;top:-16px;left:20px;width:34px;height:34px;border-radius:50%;background:var(--sun);color:var(--sun-ink);font:800 1rem/34px var(--display);text-align:center}
+
+/* pricing */
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:20px}
+.plan{display:flex;flex-direction:column;gap:14px;padding:26px;border-radius:22px;background:var(--surface);border:2px solid var(--line)}
+.plan.best{border-color:var(--teal);box-shadow:0 0 0 5px var(--teal-soft)}
+.plan.member{background:var(--navy);color:var(--on-dark);border-color:var(--navy)}
+.plan .price{font:800 2.6rem/1 var(--display)}
+.plan .price small{font:600 .92rem var(--body);opacity:.75}
+.tag{align-self:flex-start;font:800 .72rem/1 var(--display);letter-spacing:.06em;text-transform:uppercase;background:var(--sun);color:var(--sun-ink);padding:6px 10px;border-radius:999px}
+.rows{display:grid;grid-template-columns:1fr auto;gap:0}
+.rows div{padding:10px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+.member .rows div{border-color:#1E4A73}
+.rows div:nth-child(even){text-align:right;font:700 .98rem var(--display)}
+/* ladder bars */
+.ladder{display:flex;flex-direction:column;gap:12px}
+.bar-row{display:grid;grid-template-columns:minmax(120px,190px) 1fr;gap:12px;align-items:center}
+.bar-row .lbl{font-weight:700;font-size:.95rem}
+.track{background:var(--line);border-radius:999px;height:34px;position:relative;overflow:hidden}
+.fill{height:100%;border-radius:999px;display:flex;align-items:center;justify-content:flex-end;padding-right:12px;font:800 .95rem var(--display);color:#fff;min-width:56px}
+.fill.zero{background:transparent;color:var(--teal);justify-content:flex-start;padding-left:12px}
+/* calculator */
+.calc{display:grid;gap:16px}
+.calc label{font-weight:700}
+input[type=range]{width:100%;accent-color:var(--teal)}
+.seg{display:inline-flex;border:2px solid var(--line);border-radius:999px;padding:3px;flex-wrap:wrap}
+.seg button{font:700 .9rem var(--display);border:0;background:transparent;color:var(--muted);padding:8px 14px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--teal);color:#fff}
+.result{font:800 clamp(2.2rem,6vw,3.2rem)/1 var(--display);color:var(--teal)}
+.result-note{color:var(--muted);font-size:.95rem}
+.fine{font-size:.85rem;color:var(--muted)}
+.dark .fine{color:var(--on-dark-muted)}
+.promise{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}
+
+/* trust */
+.finding{display:flex;flex-direction:column;gap:10px}
+.dots{display:flex;gap:6px}
+.dots i{width:18px;height:18px;border-radius:50%;background:var(--line)}
+.dots i.y{background:var(--teal)}
+.dark .dots i{background:#1E4A73}.dark .dots i.y{background:var(--sun)}
+details{border-bottom:1px solid var(--line);padding-block:14px}
+summary{font-weight:700;cursor:pointer}
+details p{margin-top:8px;color:var(--muted)}
+form{display:grid;gap:14px}
+.field{display:flex;flex-direction:column;gap:6px;font-weight:600}
+.field input,.field select{font:inherit;font-weight:400;padding:12px 14px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink);width:100%}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:.95rem}
+.check input{margin-top:5px}
+.done{padding:16px;border-radius:12px;background:var(--sun-soft);color:var(--ink)}
+
+footer{background:var(--navy);color:var(--on-dark-muted)}
+footer .wrap{padding-block:28px;display:flex;flex-direction:column;gap:8px}
+@media (prefers-reduced-motion:no-preference){.page{animation:in .35s ease-out}@keyframes in{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .van{animation:drive 6s ease-in-out infinite alternate}@keyframes drive{from{transform:translateX(0)}to{transform:translateX(330px)}}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z" fill="currentColor"/></symbol>
+  <symbol id="i-cart" viewBox="0 0 24 24"><path d="M3 4h2l2.4 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 1.9-1.4L21 8H6.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="20" r="1.6" fill="currentColor"/><circle cx="17" cy="20" r="1.6" fill="currentColor"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 12.5h3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M6 6l9-3 1 3" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-cash" viewBox="0 0 24 24"><rect x="2.5" y="6" width="19" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="2.6" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 4.5 3.4 8 8 9 4.6-1 8-4.5 8-9V6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m8.5 12 2.5 2.5 4.5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 19c0-8 5-13 15-14-1 10-6 15-14 15M5 19l7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-van" viewBox="0 0 48 28"><rect x="1" y="4" width="28" height="18" rx="3" fill="#FFC629"/><path d="M29 9h9l7 7v6H29z" fill="#FFC629"/><rect x="32" y="11" width="6" height="5" rx="1" fill="#0B2540"/><circle cx="10" cy="23" r="4" fill="#0B2540"/><circle cx="37" cy="23" r="4" fill="#0B2540"/></symbol>
+</svg>
+
+<header>
+  <div class="wrap bar">
+    <a class="mark" href="#home" aria-label="Flex home">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13" fill="none" stroke="#00A99D" stroke-width="4"/><path d="M16 3a13 13 0 0 1 13 13" fill="none" stroke="#FFC629" stroke-width="4" stroke-linecap="round"/><path d="M16 9v7l4 3" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+      Flex
+    </a>
+    <nav aria-label="Pages">
+      <a href="#home">Home</a>
+      <a href="#how">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#trust">Why trust us</a>
+    </nav>
+    <a class="btn small" href="#join">Join the pilot</a>
+  </div>
+</header>
+
+<main>
+<!-- ============ PAGE 1: HOME ============ -->
+<div class="page" data-page="home">
+  <section class="dark hero"><div class="wrap grid2">
+    <div class="stack" style="gap:20px">
+      <span class="eyebrow">For your weekly grocery shop</span>
+      <h1>Your weekly shop, <em>delivered free</em> when it can wait.</h1>
+      <p class="lede">Delivery prices are now lower across the board. Choose Anytime, pick a 2-hour window today, and pay even less. Link your Money Market account and shops over R450 deliver free.</p>
+      <div class="chips"><span class="chip">Same day</span><span class="chip">2-hour window</span><span class="chip">New lower prices</span></div>
+      <div class="cta-row"><a class="btn" href="#join">Join the Flex pilot</a><a class="btn ghost" href="#pricing">See prices</a></div>
+    </div>
+    <div class="phone" aria-label="Example checkout showing two delivery choices">
+      <div class="screen">
+        <div class="top"><span>Checkout</span><span style="color:var(--muted)">Step 1 of 2</span></div>
+        <div class="basket"><span>Weekly shop</span><span class="num">R600</span></div>
+        <div class="opt">
+          <span class="ic"><svg width="20" height="20"><use href="#i-bolt"/></svg></span>
+          <span><b>Express 60</b><small>About an hour</small></span><span class="pr">R33.30</span>
+        </div>
+        <div class="opt on">
+          <span class="ic"><svg width="20" height="20"><use href="#i-clock"/></svg></span>
+          <span><b>Anytime today</b><small>Money Market linked</small></span><span class="pr" style="color:var(--teal)">R0</span>
+        </div>
+        <div class="slots" aria-label="Example windows"><span>12–2</span><span>2–4</span><span class="on">4–6pm</span><span>6–8</span></div>
+        <div class="pay">Pay R600 · save R33.30</div>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="band"><div class="wrap stack" style="gap:28px">
+    <h2>What changes on your weekly shop</h2>
+    <div class="grid3">
+      <div class="card stat"><span class="icon"><svg><use href="#i-wallet"/></svg></span><span class="big">R133</span><h3>Saved every month</h3><p class="muted">Four R600 shops on Anytime with Money Market linked: R0 in delivery fees instead of R133.20 on Express.</p></div>
+      <div class="card stat"><span class="icon"><svg><use href="#i-clock"/></svg></span><span class="big">2 hrs</span><h3>A window you choose</h3><p class="muted">Pick the slot that suits you. We message you when your driver is on the way.</p></div>
+      <div class="card stat"><span class="icon"><svg><use href="#i-link"/></svg></span><span class="big">1 link</span><h3>Pay the way you like</h3><p class="muted">Link Money Market once with a one-time PIN. Pay by card, or by wallet in one tap.</p></div>
+    </div>
+  </div></section>
+
+  <section class="band tint"><div class="wrap grid2">
+    <div class="stack">
+      <span class="eyebrow">Why it costs less</span>
+      <h2>One trip for the whole street, not one trip per order</h2>
+      <p class="lede">When your shop can wait, we deliver it on the same route as your neighbours'. Fewer trips cost less, so you pay less, and there are fewer vans on the road.</p>
+      <div class="legend"><span><i style="background:var(--coral)"></i>Express: one trip per order</span><span><i style="background:var(--teal)"></i>Anytime: one shared route</span></div>
+    </div>
+    <svg class="route" viewBox="0 0 420 260" role="img" aria-label="Diagram: six separate Express trips from the store compared with one shared Anytime route that visits six homes">
+      <rect x="0" y="0" width="420" height="260" rx="18" fill="var(--surface)"/>
+      <g fill="none" stroke="#E8543B" stroke-width="2.5" stroke-dasharray="6 6" opacity=".55">
+        <path d="M60 130 L150 50"/><path d="M60 130 L235 40"/><path d="M60 130 L330 60"/><path d="M60 130 L360 140"/><path d="M60 130 L300 215"/><path d="M60 130 L180 220"/>
+      </g>
+      <path d="M60 130 C100 80 130 55 150 50 S220 35 235 40 S310 50 330 60 S365 110 360 140 S320 205 300 215 S210 225 180 220" fill="none" stroke="#00857F" stroke-width="5" stroke-linecap="round"/>
+      <g fill="#0B2540">
+        <rect x="140" y="38" width="20" height="16" rx="3"/><rect x="225" y="28" width="20" height="16" rx="3"/><rect x="320" y="48" width="20" height="16" rx="3"/><rect x="350" y="128" width="20" height="16" rx="3"/><rect x="290" y="203" width="20" height="16" rx="3"/><rect x="170" y="208" width="20" height="16" rx="3"/>
+      </g>
+      <rect x="32" y="110" width="56" height="40" rx="8" fill="#00857F"/><text x="60" y="135" text-anchor="middle" font-family="Poppins, sans-serif" font-weight="700" font-size="12" fill="#fff">Store</text>
+      <use class="van" href="#i-van" x="40" y="168" width="48" height="28"/>
+      <text x="210" y="250" text-anchor="middle" font-family="Nunito Sans, sans-serif" font-size="12" fill="#4E6478">6 orders: 6 Express trips, or 1 Anytime route</text>
+    </svg>
+  </div></section>
+
+  <section class="band"><div class="wrap stack" style="gap:24px">
+    <h2>Three things, inside the app you already use</h2>
+    <div class="grid3">
+      <div class="card stack" style="gap:10px"><span class="icon"><svg><use href="#i-clock"/></svg></span><h3>Anytime delivery</h3><p>Same-day delivery in a 2-hour window, priced lower than Express.</p></div>
+      <div class="card stack" style="gap:10px"><span class="icon"><svg><use href="#i-link"/></svg></span><h3>Linked Money Market</h3><p>Link once: Anytime drops to R13.50, and is free on shops over R450.</p></div>
+      <div class="card stack" style="gap:10px"><span class="icon"><svg><use href="#i-cash"/></svg></span><h3>Top up with cash</h3><p>Add money at any till, by EFT, or from your Money Market account.</p></div>
+    </div>
+  </div></section>
+
+  <section class="band dark"><div class="wrap grid2">
+    <div class="stack"><span class="eyebrow">Built with shoppers</span><h2>Designed from interviews with people who shop online every week</h2><p class="lede">And backed by a promise: if we miss your window, your next delivery fee is on us.</p></div>
+    <div class="cta-row"><a class="btn" href="#join">Join the Flex pilot</a><a class="btn ghost" href="#trust">What shoppers told us</a></div>
+  </div></section>
+</div>
+
+<!-- ============ PAGE 2: HOW IT WORKS ============ -->
+<div class="page" data-page="how" hidden>
+  <section class="dark hero"><div class="wrap stack" style="gap:16px">
+    <span class="eyebrow">How it works</span>
+    <h1>Your shop, in the <em>window you choose</em></h1>
+    <p class="lede">Flex adds a cheaper delivery speed and a Money Market link to the grocery app you already use. Express is still there when you need it.</p>
+  </div></section>
+
+  <section class="band"><div class="wrap stack" style="gap:32px">
+    <h2>Three steps at checkout</h2>
+    <ol class="steps">
+      <li><span class="icon"><svg><use href="#i-cart"/></svg></span><h3>Fill your trolley</h3><p>Shop as you do today. Prices for both speeds show before you check out.</p></li>
+      <li><span class="icon"><svg><use href="#i-clock"/></svg></span><h3>Choose Anytime</h3><p>Pick a 2-hour window today. We suggest the windows that suit your area.</p></li>
+      <li><span class="icon"><svg><use href="#i-wallet"/></svg></span><h3>Pay your way</h3><p>Card or wallet. With Money Market linked, Anytime is R13.50, and free on shops over R450.</p></li>
+    </ol>
+  </div></section>
+
+  <section class="band tint"><div class="wrap stack" style="gap:24px">
+    <h2>Which speed is right for this order?</h2>
+    <div class="grid2" style="align-items:stretch">
+      <div class="card stack" style="gap:12px">
+        <span class="icon" style="background:#FDE3DE;color:var(--coral)"><svg><use href="#i-bolt"/></svg></span>
+        <h3>Express 60: when you need it now</h3>
+        <p>Forgot the milk? Guests arriving? Express arrives in about an hour, as today, now for R33.30.</p>
+      </div>
+      <div class="card stack" style="gap:12px;border-color:var(--teal)">
+        <span class="icon"><svg><use href="#i-clock"/></svg></span>
+        <h3>Anytime: when it can wait</h3>
+        <p>Your weekly shop or weekend restock, delivered in a 2-hour window today for R22.50, R13.50 or free.</p>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="band"><div class="wrap grid4">
+    <div class="card stack" style="gap:8px"><span class="icon"><svg><use href="#i-shield"/></svg></span><h3>Help from a person</h3><p class="fine">A real person handles every missing, spoiled or late item.</p></div>
+    <div class="card stack" style="gap:8px"><span class="icon"><svg><use href="#i-leaf"/></svg></span><h3>Fewer trips</h3><p class="fine">Shared routes put fewer delivery vans on your street.</p></div>
+    <div class="card stack" style="gap:8px"><span class="icon"><svg><use href="#i-cart"/></svg></span><h3>Cold stays cold</h3><p class="fine">Chilled and frozen items are packed for your window.</p></div>
+    <div class="card stack" style="gap:8px"><span class="icon"><svg><use href="#i-link"/></svg></span><h3>Nothing new to download</h3><p class="fine">Flex lives inside the grocery app you already use.</p></div>
+  </div></section>
+
+  <section class="band dark"><div class="wrap grid2">
+    <div class="stack"><h2>Need it now?</h2><p class="lede">Express 60 keeps its 60-minute promise, now at a lower R33.30, for the times you can't wait.</p></div>
+    <div class="cta-row"><a class="btn" href="#join">Join the Flex pilot</a><a class="btn ghost" href="#pricing">See prices</a></div>
+  </div></section>
+</div>
+
+<!-- ============ PAGE 3: PRICING ============ -->
+<div class="page" data-page="pricing" hidden>
+  <section class="dark hero"><div class="wrap stack" style="gap:16px">
+    <span class="eyebrow">Pricing</span>
+    <h1>Pay for speed <em>only when you need it</em></h1>
+    <p class="lede">Every delivery fee is now 10% lower, and the members' plan is R89. Prices shown upfront at checkout and include VAT.</p>
+  </div></section>
+
+  <section class="band"><div class="wrap stack" style="gap:24px">
+    <h2>Delivery fee on a R600 shop</h2>
+    <div class="ladder" role="img" aria-label="Delivery fee on a R600 shop: Express R33.30; Anytime by card R22.50; Anytime with Money Market linked R0; Xtra Savings Plus member Anytime R0">
+      <div class="bar-row"><span class="lbl">Express 60</span><div class="track"><div class="fill" style="width:100%;background:var(--coral)">R33.30</div></div></div>
+      <div class="bar-row"><span class="lbl">Anytime, by card</span><div class="track"><div class="fill" style="width:68%;background:var(--navy)">R22.50</div></div></div>
+      <div class="bar-row"><span class="lbl">Anytime, Money Market linked</span><div class="track"><div class="fill zero">R0 · free</div></div></div>
+      <div class="bar-row"><span class="lbl">Anytime, Xtra Savings Plus</span><div class="track"><div class="fill zero">R0 · free</div></div></div>
+    </div>
+    <p class="fine">With Money Market linked, shops under R450 pay R13.50 on Anytime. Members' shops under R350 pay the standard fee.</p>
+  </div></section>
+
+  <section class="band tint"><div class="wrap plans">
+    <div class="plan">
+      <span class="eyebrow">When you need it now</span>
+      <h2>Express 60</h2>
+      <div class="price">R33.30 <small>per order</small></div>
+      <div class="rows">
+        <div>Arrival</div><div>~60 min</div>
+        <div>By card</div><div>R33.30</div>
+        <div>Money Market linked</div><div>R33.30</div>
+        <div>Best for</div><div>Urgent top-ups</div>
+      </div>
+    </div>
+    <div class="plan best">
+      <span class="tag">Best value for weekly shops</span>
+      <h2>Anytime + Money Market</h2>
+      <div class="price">R0 <small>over R450, linked</small></div>
+      <div class="rows">
+        <div>Arrival</div><div>2-hr window</div>
+        <div>By card</div><div>R22.50</div>
+        <div>Linked, under R450</div><div>R13.50</div>
+        <div>Linked, R450 and over</div><div>R0</div>
+      </div>
+      <a class="btn teal" href="#join">Join the Flex pilot</a>
+    </div>
+    <div class="plan member">
+      <span class="tag">Xtra Savings Plus</span>
+      <h2>Members</h2>
+      <div class="price">R89 <small>a month</small></div>
+      <div class="rows">
+        <div>Anytime over R350</div><div>Free</div>
+        <div>Express 60 over R350</div><div>R13.50</div>
+        <div>Orders under R350</div><div>Standard fee</div>
+      </div>
+      <p class="fine">Your plan is now R89 a month, down from R99. Need it within the hour? R13.50, still R19.80 less than everyone else pays.</p>
+    </div>
+  </div></section>
+
+  <section class="band"><div class="wrap grid2">
+    <div class="stack">
+      <h2>Work out your saving</h2>
+      <p class="lede">Four weekly R600 shops cost R133.20 a month on Express. On Anytime with Money Market linked, they cost R0.</p>
+    </div>
+    <div class="card calc">
+      <label for="shops">Weekly-sized shops a month: <span id="shopsOut" class="num">4</span></label>
+      <input type="range" id="shops" min="1" max="8" value="4">
+      <div class="seg" role="group" aria-label="Money Market linked or not">
+        <button type="button" id="payWallet" aria-pressed="true">Money Market linked</button>
+        <button type="button" id="payCard" aria-pressed="false">Not linked</button>
+      </div>
+      <div><div class="result" id="saving">R133.20</div><div class="result-note" id="savingNote">saved a month compared with Express</div></div>
+    </div>
+  </div></section>
+
+  <section class="band dark"><div class="wrap stack" style="gap:24px">
+    <h2>Our promises</h2>
+    <div class="promise">
+      <div class="card stack" style="gap:8px"><span class="icon"><svg><use href="#i-clock"/></svg></span><h3>On-time window</h3><p>Miss your window and we credit one Express fee (R33.30) to your wallet.</p></div>
+      <div class="card stack" style="gap:8px"><span class="icon"><svg><use href="#i-shield"/></svg></span><h3>Fresh or refunded</h3><p>Tell us within 24 hours about a spoiled item and we refund it to your card or wallet.</p></div>
+      <div class="card stack" style="gap:8px"><span class="icon"><svg><use href="#i-link"/></svg></span><h3>No lock-in</h3><p>Change speed on any order. Withdraw your wallet balance at any time.</p></div>
+    </div>
+    <p class="fine">Pilot suburbs only. Free Anytime delivery applies to shops over R450 with a linked Money Market account (R13.50 below R450), and over R350 for Xtra Savings Plus members, whichever way you pay. Windows depend on your area and are confirmed at checkout.</p>
+    <div><a class="btn" href="#join">Join the Flex pilot</a></div>
+  </div></section>
+</div>
+
+<!-- ============ PAGE 4: TRUST + CTA ============ -->
+<div class="page" data-page="trust" hidden>
+  <section class="dark hero"><div class="wrap stack" style="gap:16px">
+    <span class="eyebrow">Why trust us</span>
+    <h1>Built from <em>what shoppers told us</em></h1>
+    <p class="lede">We interviewed people who order groceries online every week, and changed the design based on what they said.</p>
+  </div></section>
+
+  <section class="band"><div class="wrap grid3">
+    <div class="card finding"><div class="dots" aria-hidden="true"><i class="y"></i><i class="y"></i><i></i></div><span class="big num" style="font:800 2rem/1 var(--display);color:var(--teal)">2 of 3</span><p>shoppers had recent orders that could have arrived later the same day.</p></div>
+    <div class="card finding"><div class="dots" aria-hidden="true"><i class="y"></i><i class="y"></i><i class="y"></i></div><span class="num" style="font:800 2rem/1 var(--display);color:var(--teal)">3 of 3</span><p>add items to reach a minimum basket, so free Anytime starts at one clear amount: R450 linked, or R350 for members.</p></div>
+    <div class="card finding"><div class="dots" aria-hidden="true"><i class="y"></i><i class="y"></i><i class="y"></i></div><span class="num" style="font:800 2rem/1 var(--display);color:var(--teal)">3 of 3</span><p>would pay a small fee for speed only when it's urgent, so Express stays and planned shops get cheaper.</p></div>
+  </div></section>
+
+  <section class="band tint"><div class="wrap grid2" style="align-items:start">
+    <div class="stack">
+      <span class="icon"><svg><use href="#i-shield"/></svg></span>
+      <h2>Your money and your data</h2>
+      <p>Money Market accounts and the wallet run with Money Market's registered banking partner. Every link is confirmed with a one-time PIN.</p>
+      <p>We use your order history to suggest windows only if you opt in, and you can switch it off at any time. Your data is handled under POPIA and is never sold.</p>
+    </div>
+    <div class="card">
+      <details><summary>What if I'm not home in my window?</summary><p>We message you when the driver is 15 minutes away. You can name someone to receive the order.</p></details>
+      <details><summary>Can I change my window?</summary><p>Yes, until picking starts, in the app.</p></details>
+      <details><summary>What if I need something urgently?</summary><p>Choose Express 60 on that order. Flex never removes it.</p></details>
+      <details><summary>Do I have to pay from the wallet?</summary><p>No. The R13.50 Anytime fee, and free Anytime over R450, come with a linked Money Market account. Pay by card or wallet.</p></details>
+      <details><summary>How do I top up my wallet?</summary><p>With cash at any till, by EFT, or from your Money Market account.</p></details>
+      <details><summary>Will my chilled items stay cold?</summary><p>Chilled and frozen items are packed cold for your window. If something arrives spoiled, report it within 24 hours for a refund.</p></details>
+    </div>
+  </div></section>
+
+  <section class="band dark" id="join-band"><div class="wrap grid2" style="align-items:start">
+    <div class="stack">
+      <span class="eyebrow">Pilot sign-up</span>
+      <h2>Join the Flex pilot</h2>
+      <p class="lede">Tell us a little about how you shop. We'll let you know when Flex opens in your suburb.</p>
+    </div>
+    <form id="joinForm" class="card" novalidate style="background:var(--surface);color:var(--ink)">
+      <div class="field"><label for="fname">First name</label><input id="fname" name="fname" autocomplete="given-name" required></div>
+      <div class="field"><label for="suburb">Suburb</label><input id="suburb" name="suburb" required></div>
+      <div class="field"><label for="freq">How often do you order groceries online?</label>
+        <select id="freq" name="freq"><option>Every week</option><option>Every two weeks</option><option>Once a month</option><option>Less often</option></select></div>
+      <label class="check"><input type="checkbox" id="wallet" name="wallet"> I'd like to link my Money Market account</label>
+      <button class="btn" type="submit">Join the Flex pilot</button>
+      <p id="formMsg" class="fine" role="status"></p>
+    </form>
+  </div></section>
+</div>
+</main>
+
+<footer><div class="wrap">
+  <p class="fine">Academic concept prototype for BUS6140, Nexford University. Not affiliated with or endorsed by Shoprite Holdings, Checkers or Sixty60. Colours are illustrative; no logos are used.</p>
+  <p class="fine">Findings from 3 shopper interviews (October 2026) and test orders on rival apps (18 Oct 2026).</p>
+</div></footer>
+
+<script>
+(function(){
+  const pages = ["home","how","pricing","trust"];
+  function show(tok){
+    let target = tok, scrollTo = null;
+    if (tok === "join"){ target = "trust"; scrollTo = "join-band"; }
+    if (!pages.includes(target)) target = "home";
+    document.querySelectorAll(".page").forEach(p => p.hidden = p.dataset.page !== target);
+    document.querySelectorAll("nav a").forEach(a => {
+      if (a.getAttribute("href") === "#" + target) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current");
+    });
+    if (scrollTo) document.getElementById(scrollTo).scrollIntoView({behavior:"smooth"});
+    else window.scrollTo(0,0);
+  }
+  window.addEventListener("hashchange", () => show(location.hash.slice(1)));
+  show(location.hash.slice(1) || "home");
+
+  // saving calculator (Express R33.30; Anytime R22.50 by card; R0 over R450 with Money Market linked)
+  const EXPRESS = 33.30, ANY_CARD = 22.50;
+  const R = v => "R" + (Math.round(v * 100) / 100).toFixed(2).replace(/\.00$/, "");
+  let linked = true;
+  const shops = document.getElementById("shops");
+  function calc(){
+    const n = +shops.value;
+    document.getElementById("shopsOut").textContent = n;
+    document.getElementById("saving").textContent = R(n * (EXPRESS - (linked ? 0 : ANY_CARD)));
+    document.getElementById("savingNote").textContent = linked
+      ? "saved a month compared with Express (shops over R450, Money Market linked)"
+      : "saved a month compared with Express, paying " + R(ANY_CARD) + " per order on Anytime";
+  }
+  shops.addEventListener("input", calc);
+  const bw = document.getElementById("payWallet"), bc = document.getElementById("payCard");
+  bw.addEventListener("click", () => { linked = true; bw.setAttribute("aria-pressed","true"); bc.setAttribute("aria-pressed","false"); calc(); });
+  bc.addEventListener("click", () => { linked = false; bc.setAttribute("aria-pressed","true"); bw.setAttribute("aria-pressed","false"); calc(); });
+  calc();
+
+  document.getElementById("joinForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const msg = document.getElementById("formMsg");
+    const name = document.getElementById("fname").value.trim(), sub = document.getElementById("suburb").value.trim();
+    if (!name || !sub){ msg.className = "fine"; msg.textContent = "Please add your first name and suburb so we know where to open Flex."; return; }
+    msg.className = "done";
+    msg.textContent = "Thanks, " + name + ". This is a concept prototype, so nothing was sent. In the live microsite your sign-up is recorded for the pilot.";
+  });
+})();
+</script>
+</body>
+</html>
